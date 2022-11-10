@@ -1,13 +1,15 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "../css/createOrder.css";
 
+//Urls to obtain the data
 const URI = "http://localhost:4000/orders";
 const URI_PRODUCTS = "http://localhost:4000/products";
 const URI_SUMMARY = "http://localhost:4000/sum";
 
 function EditOrder() {
+  //States to use the information from the table order
   const [order_id, setorder_id] = useState(0);
   const [order_status, setorder_status] = useState("");
   const [date, setdate] = useState("");
@@ -19,13 +21,16 @@ function EditOrder() {
   const [total_taxes, settotal_taxes] = useState(0);
   const [total_amount, settotal_amount] = useState(0);
 
+  //States to merge the tables with information from products and products detail
   const [products, setproducts] = useState([]);
-
   const [productDetail, setproductDetail] = useState([]);
+  const [allproducts, setallproducts] = useState([]);
 
   const navigate = useNavigate();
   const id = useParams();
 
+  /*****************************************************************/
+  //components to update the order in the db
   const update = async (e) => {
     e.preventDefault();
     await axios.put(`${URI}/${id.id}`, {
@@ -59,7 +64,9 @@ function EditOrder() {
     settotal_taxes(res.data.total_taxes);
     settotal_amount(res.data.total_amount);
   };
+  /*****************************************************************/
 
+  //Components to obtain the data from the table of products associated with an order
   useEffect(() => {
     getProducts();
   }, [order_id]);
@@ -73,9 +80,8 @@ function EditOrder() {
       setproducts(init);
     }
   };
-
-  const [allproducts, setallproducts] = useState([]);
-
+  /*****************************************************************/
+  //Components to obtain the data from the table of products
   useEffect(() => {
     getallproducts();
   }, []);
@@ -86,6 +92,8 @@ function EditOrder() {
     setallproducts(res.data);
   };
 
+  /*****************************************************************/
+  //Components to merge the tables
   const giveproductDetail = () => {
     let productnew = products.map((item, i) =>
       Object.assign({}, item, allproducts[i])

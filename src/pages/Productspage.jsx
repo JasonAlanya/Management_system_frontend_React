@@ -5,8 +5,10 @@ import { Link } from "react-router-dom";
 const URI = "http://localhost:4000/products";
 
 function Productspage() {
+  //Creation of states to show the products
   const [products, setproducts] = useState([]);
 
+  //components to get the information in the table of prodcuts
   useEffect(() => {
     getproducts();
   }, []);

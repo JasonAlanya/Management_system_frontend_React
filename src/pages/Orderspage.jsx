@@ -5,8 +5,10 @@ import { Link } from "react-router-dom";
 const URI = "http://localhost:4000/orders";
 
 function Orderspage() {
+  //Creation of states to show the orders
   const [orders, setorders] = useState([]);
 
+  //components to get the information in the table of orders
   useEffect(() => {
     getorders();
   }, []);
@@ -14,11 +16,6 @@ function Orderspage() {
   const getorders = async () => {
     const res = await axios.get(URI);
     setorders(res.data);
-  };
-
-  const deleteorders = async (id) => {
-    await axios.delete(`${URI}/${id}`);
-    getorders();
   };
 
   return (

@@ -8,15 +8,17 @@ const URI = "http://localhost:4000/orders";
 const URI_SUMMARY = "http://localhost:4000/sum";
 
 function CreateOrder() {
+  //context acquisition
   const { cart, addProduct, removeProduct, clearCart } = useCartContext();
-  let subtotal = 0;
-  cart.forEach((e) => {
-    subtotal = subtotal + e.product_price * e.quantity;
-  });
 
   const [customer, setcustomer] = useState("");
   const navigate = useNavigate();
 
+  //operations for the igv and the results
+  let subtotal = 0;
+  cart.forEach((e) => {
+    subtotal = subtotal + e.product_price * e.quantity;
+  });
   const city_tax = Number((subtotal * 0.1).toFixed(2));
   const county_tax = Number((subtotal * 0.05).toFixed(2));
   const state_tax = Number((subtotal * 0.08).toFixed(2));
@@ -26,13 +28,14 @@ function CreateOrder() {
   );
   const total_amount = Number(subtotal) + total_taxes;
 
+  //operation to get the actual date
   var today = new Date();
   var dd = String(today.getDate()).padStart(2, "0");
   var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
   var yyyy = today.getFullYear();
-
   today = yyyy + "-" + mm + "-" + dd;
 
+  //function to save the information in two tables
   const store = async (e) => {
     e.preventDefault();
     await axios

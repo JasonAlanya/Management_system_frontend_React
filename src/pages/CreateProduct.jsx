@@ -5,12 +5,14 @@ import { useNavigate } from "react-router-dom";
 const URI = "http://localhost:4000/products";
 
 function CreateProduct() {
+  //Creation of states to save the information
   const [product_name, setproduct_name] = useState("");
   const [product_category, setproduct_category] = useState("Cookies");
   const [product_price, setproduct_price] = useState(0);
   const [product_status, setproduct_status] = useState("Active");
   const navigate = useNavigate();
 
+  //function to save the information in the table of products
   const store = async (e) => {
     e.preventDefault();
     await axios.post(URI, {

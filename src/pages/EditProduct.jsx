@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 const URI = "http://localhost:4000/products";
 
 function EditProduct() {
+  //States to use the information from the table product
   const [product_name, setproduct_name] = useState("");
   const [product_category, setproduct_category] = useState("");
   const [product_price, setproduct_price] = useState(0);
@@ -12,6 +13,7 @@ function EditProduct() {
   const navigate = useNavigate();
   const id = useParams();
 
+  //components to update the product in the db
   const update = async (e) => {
     e.preventDefault();
     await axios.put(`${URI}/${id.id}`, {

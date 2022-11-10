@@ -8,10 +8,13 @@ import "../css/cards.css";
 const URI = "http://localhost:4000/products";
 
 function Products() {
-  const { addProduct } = useCartContext();
-
+  //Creation of states to show the products
   const [products, setproducts] = useState([]);
 
+  //Use of the context to add products
+  const { addProduct } = useCartContext();
+
+  //components to get the information in the table of products
   useEffect(() => {
     getproducts();
   }, []);
