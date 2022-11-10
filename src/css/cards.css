@@ -1,0 +1,41 @@
+.cards-section {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.container-cards {
+  margin-top: 1rem;
+  display: flex;
+  width: 100%;
+  padding: 0 5%;
+}
+
+.card {
+  width: 23%;
+  margin: 1%;
+  padding: 1%;
+  text-align: left;
+}
+
+.card h1,
+.card h2 {
+  font-size: 1.2rem;
+}
+
+.btns {
+  margin-top: auto;
+  margin-left: auto;
+}
+
+.btns a {
+  margin-right: 0.5rem;
+}
+
+.order-section {
+  display: flex;
+}
+
+.order-section a {
+  margin-right: 10%;
+  margin-left: auto;
+}

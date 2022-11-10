@@ -1,0 +1,18 @@
+.summary-order-section h1 {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.form-customer {
+  width: 50%;
+  margin: auto;
+}
+
+.order-section-finish {
+  margin-right: 10%;
+  display: flex;
+}
+
+.order-section-finish a {
+  margin-left: 10%;
+}

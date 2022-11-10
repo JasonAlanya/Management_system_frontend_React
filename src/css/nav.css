@@ -1,0 +1,23 @@
+.navigation {
+  display: flex;
+  height: 75px;
+  align-items: center;
+  background-color: darkcyan;
+}
+
+.logo {
+  color: #fff;
+  text-decoration: none;
+  margin: 0 20px 0 50px;
+  font-size: 2rem;
+}
+
+.logo:hover {
+  color: #fff;
+}
+
+.nav-link {
+  color: #fff;
+  text-decoration: 0;
+  margin: 0 20px;
+}
