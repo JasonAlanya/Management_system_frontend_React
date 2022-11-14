@@ -4,9 +4,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import "../css/createOrder.css";
 
 //Urls to obtain the data
-const URI = "http://localhost:4000/orders";
-const URI_PRODUCTS = "http://localhost:4000/products";
-const URI_SUMMARY = "http://localhost:4000/sum";
+const URI = "https://pruebasinicial.azurewebsites.net/orders";
+const URI_SUMMARY = "https://pruebasinicial.azurewebsites.net/sum";
 
 function EditOrder() {
   //States to use the information from the table order
@@ -23,8 +22,6 @@ function EditOrder() {
 
   //States to merge the tables with information from products and products detail
   const [products, setproducts] = useState([]);
-  const [productDetail, setproductDetail] = useState([]);
-  const [allproducts, setallproducts] = useState([]);
 
   const navigate = useNavigate();
   const id = useParams();
@@ -73,37 +70,11 @@ function EditOrder() {
 
   const getProducts = async () => {
     if (order_id > 0) {
-      const ressum = await axios.get(`${URI_SUMMARY}/${order_id}`);
-      const init = ressum.data.map((e) => {
-        return { id: e.id_product, quantity: e.quantity };
-      });
-      setproducts(init);
+      const summary = await axios.get(`${URI_SUMMARY}/${order_id}`);
+
+      setproducts(summary.data);
     }
   };
-  /*****************************************************************/
-  //Components to obtain the data from the table of products
-  useEffect(() => {
-    getallproducts();
-  }, []);
-
-  const getallproducts = async () => {
-    const res = await axios.get(URI_PRODUCTS);
-
-    setallproducts(res.data);
-  };
-
-  /*****************************************************************/
-  //Components to merge the tables
-  const giveproductDetail = () => {
-    let productnew = products.map((item, i) =>
-      Object.assign({}, item, allproducts[i])
-    );
-    setproductDetail(productnew);
-  };
-
-  useEffect(() => {
-    giveproductDetail();
-  }, [allproducts, products]);
 
   return (
     <div className="summary-order-section">
@@ -143,14 +114,14 @@ function EditOrder() {
               </tr>
             </thead>
             <tbody>
-              {productDetail.map((product, index) => (
+              {products.map((product, index) => (
                 <tr key={index}>
                   <td>{index + 1}</td>
-                  <td>{product.product_name}</td>
-                  <td>{product.product_category}</td>
+                  <td>{product.name}</td>
+                  <td>{product.category}</td>
                   <td>{product.quantity}</td>
-                  <td>{product.product_price}</td>
-                  <td>{product.product_price * product.quantity}</td>
+                  <td>{product.price}</td>
+                  <td>{product.price * product.quantity}</td>
                 </tr>
               ))}
               <tr>

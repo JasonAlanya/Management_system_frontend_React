@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-const URI = "http://localhost:4000/products";
+const URI = "https://pruebasinicial.azurewebsites.net/products";
 
 function Productspage() {
   //Creation of states to show the products
@@ -40,10 +40,10 @@ function Productspage() {
               {products.map((product, index) => (
                 <tr key={product.id}>
                   <td>{index + 1}</td>
-                  <td>{product.product_name}</td>
-                  <td>{product.product_category}</td>
-                  <td>{product.product_price}</td>
-                  <td>{product.product_status}</td>
+                  <td>{product.name}</td>
+                  <td>{product.category}</td>
+                  <td>{product.price}</td>
+                  <td>{product.product_state}</td>
                   <td>
                     <Link to={`/editproduct/${product.id}`}>Edit</Link>
                   </td>

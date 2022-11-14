@@ -1,23 +1,34 @@
 import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useCartContext } from "../Context/CartContext";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  addOneToOrder,
+  clearOrder,
+  removeFromOrder,
+  removeOneFromOrder,
+} from "../actions/ordersActions";
 import "../css/createOrder.css";
 
-const URI = "http://localhost:4000/orders";
-const URI_SUMMARY = "http://localhost:4000/sum";
+const URI = "https://pruebasinicial.azurewebsites.net/orders";
+const URI_SUMMARY = "https://pruebasinicial.azurewebsites.net/sum";
 
 function CreateOrder() {
+  const state = useSelector((state) => state);
+  const dispatch = useDispatch();
+
+  const { currentOrder } = state.order;
+
   //context acquisition
-  const { cart, addProduct, removeProduct, clearCart } = useCartContext();
+  //const { cart, addProduct, removeProduct, clearCart } = useCartContext();
 
   const [customer, setcustomer] = useState("");
   const navigate = useNavigate();
 
   //operations for the igv and the results
   let subtotal = 0;
-  cart.forEach((e) => {
-    subtotal = subtotal + e.product_price * e.quantity;
+  currentOrder.forEach((e) => {
+    subtotal = subtotal + e.price * e.quantity;
   });
   const city_tax = Number((subtotal * 0.1).toFixed(2));
   const county_tax = Number((subtotal * 0.05).toFixed(2));
@@ -26,7 +37,7 @@ function CreateOrder() {
   const total_taxes = Number(
     (city_tax + county_tax + state_tax + federal_tax).toFixed(2)
   );
-  const total_amount = Number(subtotal) + total_taxes;
+  const total_amount = (Number(subtotal) + total_taxes).toFixed(2);
 
   //operation to get the actual date
   var today = new Date();
@@ -51,7 +62,7 @@ function CreateOrder() {
         total_amount: total_amount,
       })
       .then((response) => {
-        cart.forEach(async (e) => {
+        currentOrder.forEach(async (e) => {
           await axios.post(URI_SUMMARY, {
             id_order: response.data.id,
             id_product: e.id,
@@ -59,7 +70,7 @@ function CreateOrder() {
           });
         });
       });
-    clearCart();
+    dispatch(clearOrder());
     navigate("/");
   };
 
@@ -90,7 +101,7 @@ function CreateOrder() {
                 <th>
                   <button
                     className=" btn btn-danger"
-                    onClick={() => clearCart()}
+                    onClick={() => dispatch(clearOrder())}
                   >
                     Clean order
                   </button>
@@ -98,27 +109,29 @@ function CreateOrder() {
               </tr>
             </thead>
             <tbody>
-              {cart.map((product, index) => (
+              {currentOrder.map((product, index) => (
                 <tr key={index}>
                   <td>{index + 1}</td>
-                  <td>{product.product_name}</td>
-                  <td>{product.product_category}</td>
+                  <td>{product.name}</td>
+                  <td>{product.category}</td>
                   <td>
-                    <input
-                      type="number"
-                      defaultValue={product.quantity}
-                      onChange={(e) => addProduct(product, e.target.value)}
-                    />
+                    <button
+                      onClick={() => dispatch(removeOneFromOrder(product.id))}
+                    >
+                      -
+                    </button>
+                    <input value={product.quantity} type="number" disabled />
+                    <button onClick={() => dispatch(addOneToOrder(product.id))}>
+                      +
+                    </button>
                   </td>
-                  <td>{product.product_price}</td>
-                  <td>
-                    {(product.product_price * product.quantity).toFixed(2)}
-                  </td>
+                  <td>{product.price}</td>
+                  <td>{(product.price * product.quantity).toFixed(2)}</td>
 
                   <td>
                     <button
                       className=" btn btn-danger"
-                      onClick={() => removeProduct(product.id)}
+                      onClick={() => dispatch(removeFromOrder(product.id))}
                     >
                       <i className="fa-solid fa-trash"></i>
                     </button>

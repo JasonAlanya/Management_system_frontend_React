@@ -1,49 +1,41 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { useCartContext } from "../Context/CartContext";
+import { getProducts } from "../actions/ordersActions";
+import ProductItem from "../Components/ProductItem";
 
 import "../css/cards.css";
 
-const URI = "http://localhost:4000/products";
+const URI = "https://pruebasinicial.azurewebsites.net/products";
 
 function Products() {
-  //Creation of states to show the products
-  const [products, setproducts] = useState([]);
+  const state = useSelector((state) => state);
+  const dispatch = useDispatch();
 
-  //Use of the context to add products
-  const { addProduct } = useCartContext();
+  const { products } = state.order;
 
-  //components to get the information in the table of products
+  //components to get the information in the products cards
   useEffect(() => {
-    getproducts();
-  }, []);
+    setProducts();
+  });
 
-  const getproducts = async () => {
+  const setProducts = async () => {
     const res = await axios.get(URI);
-    setproducts(res.data);
+    dispatch(getProducts(res.data));
   };
 
   return (
     <div className="cards-section">
       <h1>Select the products</h1>
       <div className="container-cards">
-        {products.map((product) => (
-          <div key={product.id} className="card">
-            <h1>Product name: {product.product_name}</h1>
-            <h2>Product category: {product.product_category}</h2>
-            <h2>Product price: {product.product_price}</h2>
-            <h2>Product status: {product.product_status}</h2>
-            <div className="btns">
-              <button
-                onClick={() => addProduct(product, 1)}
-                className="btn btn-primary"
-              >
-                Add product
-              </button>
-            </div>
-          </div>
-        ))}
+        {products.length === 0 ? (
+          <h1>Loading...</h1>
+        ) : (
+          products.map((product) => (
+            <ProductItem key={product.id} data={product} />
+          ))
+        )}
       </div>
       <div className="order-section">
         <Link to="/createordersummary" className="btn-next btn btn-primary">

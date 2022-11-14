@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-const URI = "http://localhost:4000/orders";
+const URI = "https://pruebasinicial.azurewebsites.net/orders";
 
 function Orderspage() {
   //Creation of states to show the orders
@@ -42,7 +42,7 @@ function Orderspage() {
                   <td>{index + 1}</td>
                   <td>{order.customer}</td>
                   <td>{order.order_status}</td>
-                  <td>{order.date}</td>
+                  <td>{order.date.split("T")[0]}</td>
                   <td>{order.total_amount}</td>
                   <td>
                     <Link to={`/editorder/${order.id}`}>Edit</Link>

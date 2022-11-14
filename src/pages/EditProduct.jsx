@@ -2,12 +2,13 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-const URI = "http://localhost:4000/products";
+const URI = "https://pruebasinicial.azurewebsites.net/products";
 
 function EditProduct() {
   //States to use the information from the table product
   const [product_name, setproduct_name] = useState("");
   const [product_category, setproduct_category] = useState("");
+  const [product_categoryId, setproduct_categoryId] = useState(0);
   const [product_price, setproduct_price] = useState(0);
   const [product_status, setproduct_status] = useState("");
   const navigate = useNavigate();
@@ -17,10 +18,10 @@ function EditProduct() {
   const update = async (e) => {
     e.preventDefault();
     await axios.put(`${URI}/${id.id}`, {
-      product_name: product_name,
-      product_category: product_category,
-      product_price: product_price,
-      product_status: product_status,
+      name: product_name,
+      id_category: product_categoryId,
+      price: product_price,
+      product_state: product_status,
     });
     navigate("/products");
   };
@@ -31,16 +32,42 @@ function EditProduct() {
 
   const getProductById = async () => {
     const res = await axios.get(`${URI}/${id.id}`);
-    setproduct_name(res.data.product_name);
-    setproduct_category(res.data.product_category);
-    setproduct_price(res.data.product_price);
-    setproduct_status(res.data.product_status);
+    setproduct_name(res.data.name);
+    setproduct_category(res.data.category);
+    setproduct_price(res.data.price);
+    setproduct_status(res.data.product_state);
   };
 
   const deleteproduct = async () => {
     await axios.delete(`${URI}/${id.id}`);
     navigate("/products");
   };
+
+  const setCategoryId = (category) => {
+    switch (category) {
+      case "Cookies":
+        setproduct_categoryId(1);
+        break;
+      case "Candies":
+        setproduct_categoryId(2);
+        break;
+      case "Cakes":
+        setproduct_categoryId(3);
+        break;
+      case "Desserts":
+        setproduct_categoryId(4);
+        break;
+      case "Drinks":
+        setproduct_categoryId(5);
+        break;
+      default:
+        setproduct_categoryId(1);
+    }
+  };
+
+  useEffect(() => {
+    setCategoryId(product_category);
+  }, [product_category]);
 
   return (
     <div className="forms">
