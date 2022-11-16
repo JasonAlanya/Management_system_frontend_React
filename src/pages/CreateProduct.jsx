@@ -97,9 +97,15 @@ function CreateProduct() {
             <option>Inactive</option>
           </select>
         </div>
-        <button type="submit" className="btn btn-primary">
-          Save
-        </button>
+        {product_name != "" && product_price != "" ? (
+          <button type="submit" className="btn btn-primary">
+            Save
+          </button>
+        ) : (
+          <button type="submit" className="btn btn-primary" disabled>
+            Save
+          </button>
+        )}
       </form>
     </div>
   );

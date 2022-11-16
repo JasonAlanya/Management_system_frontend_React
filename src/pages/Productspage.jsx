@@ -1,21 +1,51 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import {
+  getProducts,
+  getProductsQuantity,
+  nextPageProducts,
+  previousPageProducts,
+  selectPageProducts,
+} from "../actions/crudProductsActions";
+import Pagination from "../Components/Pagination";
 
-const URI = "https://pruebasinicial.azurewebsites.net/products";
+const URI = "https://pruebasinicial.azurewebsites.net/productspagination";
+const URI_GET_QUANTITY =
+  "https://pruebasinicial.azurewebsites.net/productsquantity";
+
+const Products_per_page = 5;
 
 function Productspage() {
   //Creation of states to show the products
-  const [products, setproducts] = useState([]);
+  const state = useSelector((state) => state);
+  const dispatch = useDispatch();
 
-  //components to get the information in the table of prodcuts
+  const { products, currentPage, productsQuantity } = state.gettingProducts;
+
+  //components to get the information from the table of prodcuts
   useEffect(() => {
-    getproducts();
+    setproducts();
+  }, [currentPage]);
+
+  useEffect(() => {
+    setProductsQuantity();
   }, []);
 
-  const getproducts = async () => {
-    const res = await axios.get(URI);
-    setproducts(res.data);
+  const setProductsQuantity = async () => {
+    const res = await axios.get(URI_GET_QUANTITY);
+    //setproducts(res.data);
+    const cont = res.data[0].counter;
+    dispatch(getProductsQuantity(cont));
+  };
+
+  const setproducts = async () => {
+    const res = await axios.get(
+      `${URI}/${(currentPage - 1) * Products_per_page}&${Products_per_page}`
+    );
+    //setproducts(res.data);
+    dispatch(getProducts(res.data));
   };
 
   return (
@@ -39,7 +69,7 @@ function Productspage() {
             <tbody>
               {products.map((product, index) => (
                 <tr key={product.id}>
-                  <td>{index + 1}</td>
+                  <td>{(currentPage - 1) * Products_per_page + index + 1}</td>
                   <td>{product.name}</td>
                   <td>{product.category}</td>
                   <td>{product.price}</td>
@@ -53,6 +83,14 @@ function Productspage() {
           </table>
         </div>
       </div>
+      <Pagination
+        postPerpage={Products_per_page}
+        totalPosts={productsQuantity}
+        previousPage={() => dispatch(previousPageProducts())}
+        nextPage={() => dispatch(nextPageProducts())}
+        selectPage={(e) => dispatch(selectPageProducts(e))}
+        currentPage={currentPage}
+      />
     </div>
   );
 }

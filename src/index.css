@@ -26,3 +26,12 @@
 .forms button {
   margin: 10px 10px 0 0;
 }
+
+.container-pagination {
+  display: flex;
+  justify-content: center;
+}
+
+.page-link-active {
+  background-color: rgb(204, 204, 204) !important;
+}

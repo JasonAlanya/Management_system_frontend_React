@@ -120,9 +120,15 @@ function EditProduct() {
             <option>Inactive</option>
           </select>
         </div>
-        <button type="submit" className="btn btn-primary">
-          Save
-        </button>
+        {product_name != "" && product_price != "" ? (
+          <button type="submit" className="btn btn-primary">
+            Save
+          </button>
+        ) : (
+          <button type="submit" className="btn btn-primary" disabled>
+            Save
+          </button>
+        )}
         <button onClick={() => deleteproduct(id)} className="btn btn-danger">
           Delete
         </button>

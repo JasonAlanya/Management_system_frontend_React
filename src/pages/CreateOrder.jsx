@@ -25,7 +25,7 @@ function CreateOrder() {
   const [customer, setcustomer] = useState("");
   const navigate = useNavigate();
 
-  //operations for the igv and the results
+  //operations for the taxes and the results
   let subtotal = 0;
   currentOrder.forEach((e) => {
     subtotal = subtotal + e.price * e.quantity;
@@ -200,9 +200,15 @@ function CreateOrder() {
         <Link to="/createorder" className="btn-create btn btn-primary">
           Previous
         </Link>
-        <button className="btn-create btn btn-primary" onClick={store}>
-          Finish order
-        </button>
+        {customer != "" && currentOrder.length > 0 ? (
+          <button className="btn-create btn btn-primary" onClick={store}>
+            Finish order
+          </button>
+        ) : (
+          <button className=" btn-create btn btn-primary" disabled>
+            Finish order
+          </button>
+        )}
       </div>
     </div>
   );

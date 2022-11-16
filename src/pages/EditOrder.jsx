@@ -177,9 +177,15 @@ function EditOrder() {
         </div>
       </div>
       <div className="order-section-finish">
-        <button className="btn-create btn btn-primary" onClick={update}>
-          Update
-        </button>
+        {customer !== "" ? (
+          <button className="btn-create btn btn-primary" onClick={update}>
+            Finish order
+          </button>
+        ) : (
+          <button className=" btn-create btn btn-primary" disabled>
+            Finish order
+          </button>
+        )}
       </div>
     </div>
   );
