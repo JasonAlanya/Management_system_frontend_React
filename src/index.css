@@ -35,3 +35,18 @@
 .page-link-active {
   background-color: rgb(204, 204, 204) !important;
 }
+
+.search-form {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  background-color: cadetblue;
+  margin: 0.5rem auto;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+}
+
+.search-form div {
+  margin: 0 0.5rem;
+}

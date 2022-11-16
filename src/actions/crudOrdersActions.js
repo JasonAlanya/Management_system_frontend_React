@@ -3,7 +3,10 @@ import {
   DELETE_ORDER,
   GET_ORDER,
   GET_ORDERS,
+  GET_ORDERS_ORDER_BY,
+  GET_ORDERS_ORDER_BY_AD,
   GET_ORDERS_QUANTITY,
+  GET_ORDERS_SEARCH_NAME,
   NEXT_PAGE_ORDER,
   PREVIOUS_PAGE_ORDER,
   SELECT_PAGE_ORDER,
@@ -24,6 +27,21 @@ export const selectPageOrders = (number) => ({
 export const getOrdersQuantity = (number) => ({
   type: GET_ORDERS_QUANTITY,
   payload: number,
+});
+
+export const getOrdersSearchName = (name) => ({
+  type: GET_ORDERS_SEARCH_NAME,
+  payload: name,
+});
+
+export const getOrdersOrderBy = (name) => ({
+  type: GET_ORDERS_ORDER_BY,
+  payload: name,
+});
+
+export const getOrdersOrderByAD = (name) => ({
+  type: GET_ORDERS_ORDER_BY_AD,
+  payload: name,
 });
 /*
 export const getOrder = (id) => ({ type: GET_ORDER, payload: id });

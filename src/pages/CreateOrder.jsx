@@ -14,14 +14,12 @@ const URI = "https://pruebasinicial.azurewebsites.net/orders";
 const URI_SUMMARY = "https://pruebasinicial.azurewebsites.net/sum";
 
 function CreateOrder() {
+  //Components to control the states of the creation of a new order
   const state = useSelector((state) => state);
   const dispatch = useDispatch();
-
   const { currentOrder } = state.order;
 
-  //context acquisition
-  //const { cart, addProduct, removeProduct, clearCart } = useCartContext();
-
+  //State to save the customer name
   const [customer, setcustomer] = useState("");
   const navigate = useNavigate();
 
@@ -39,14 +37,14 @@ function CreateOrder() {
   );
   const total_amount = (Number(subtotal) + total_taxes).toFixed(2);
 
-  //operation to get the actual date
+  //operation to get the current date
   var today = new Date();
   var dd = String(today.getDate()).padStart(2, "0");
   var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
   var yyyy = today.getFullYear();
   today = yyyy + "-" + mm + "-" + dd;
 
-  //function to save the information in two tables
+  //function to save the information in two tables: orders and product_order
   const store = async (e) => {
     e.preventDefault();
     await axios

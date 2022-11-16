@@ -4,24 +4,36 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import {
   getOrders,
+  getOrdersOrderBy,
+  getOrdersOrderByAD,
   getOrdersQuantity,
+  getOrdersSearchName,
   nextPageOrders,
   previousPageOrders,
   selectPageOrders,
 } from "../actions/crudOrdersActions";
+import FilterOrder from "../Components/FilterOrder";
 import Pagination from "../Components/Pagination";
 
-const URI = "https://pruebasinicial.azurewebsites.net/orderspagination";
-const URI_GET_QUANTITY =
-  "https://pruebasinicial.azurewebsites.net/ordersquantity";
-const Orders_per_page = 1;
+const URI = "https://pruebasinicial.azurewebsites.net";
+
+const Orders_per_page = 3;
 
 function Orderspage() {
   //Creation of states to show the orders
   const state = useSelector((state) => state);
   const dispatch = useDispatch();
 
-  const { orders, currentPage, ordersQuantity } = state.gettingOrders;
+  const {
+    orders,
+    currentPage,
+    ordersQuantity,
+    orderByValues,
+    customerNameSearch,
+    orderByValue,
+    orderByAD,
+  } = state.gettingOrders;
+
   //components to get the information in the table of orders
   useEffect(() => {
     setorders();
@@ -31,23 +43,55 @@ function Orderspage() {
     setOrdersQuantity();
   }, []);
 
+  //function to get the quantity of orders with filters
   const setOrdersQuantity = async () => {
-    const res = await axios.get(URI_GET_QUANTITY);
-    //setproducts(res.data);
-    const cont = res.data[0].counter;
-    dispatch(getOrdersQuantity(cont));
+    if (customerNameSearch === "") {
+      const res = await axios.get(`${URI}/ordersquantity`);
+      const cont = res.data[0].counter;
+      dispatch(getOrdersQuantity(cont));
+    } else {
+      const res = await axios.get(
+        `${URI}/ordersquantity/${customerNameSearch}`
+      );
+      const cont = res.data[0].counter;
+      dispatch(getOrdersQuantity(cont));
+    }
+    dispatch(selectPageOrders(1));
   };
 
+  //function to get orders with filters
   const setorders = async () => {
-    const res = await axios.get(
-      `${URI}/${(currentPage - 1) * Orders_per_page}&${Orders_per_page}`
-    );
-    //setproducts(res.data);
-    dispatch(getOrders(res.data));
+    if (customerNameSearch === "") {
+      const res = await axios.get(
+        `${URI}/orderspagination/${orderByValue}&${orderByAD}&${
+          (currentPage - 1) * Orders_per_page
+        }&${Orders_per_page}`
+      );
+      dispatch(getOrders(res.data));
+    } else {
+      const res = await axios.get(
+        `${URI}/orderspaginationsearcher/${customerNameSearch}&${orderByValue}&${orderByAD}&${
+          (currentPage - 1) * Orders_per_page
+        }&${Orders_per_page}`
+      );
+      dispatch(getOrders(res.data));
+    }
   };
 
   return (
     <div className="container">
+      <FilterOrder
+        searchBy="Consumer name"
+        orderBy={orderByValues}
+        setSearcher={(e) => dispatch(getOrdersSearchName(e))}
+        setSearcherBy={(e) => dispatch(getOrdersOrderBy(e))}
+        setSearcherByAD={(e) => dispatch(getOrdersOrderByAD(e))}
+        resetProductsQuantity={() => setOrdersQuantity()}
+        resetProducts={() => setorders()}
+        searcherValue={customerNameSearch}
+        orderByValue={orderByValue}
+        orderByADValue={orderByAD}
+      />
       <div className="row">
         <div className="col">
           <Link to="/createorder" className="btn-create btn btn-primary">

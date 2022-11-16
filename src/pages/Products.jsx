@@ -10,9 +10,9 @@ import "../css/cards.css";
 const URI = "https://pruebasinicial.azurewebsites.net/products";
 
 function Products() {
+  //States to manage the information in the products cards
   const state = useSelector((state) => state);
   const dispatch = useDispatch();
-
   const { products } = state.order;
 
   //components to get the information in the products cards

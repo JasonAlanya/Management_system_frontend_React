@@ -6,11 +6,12 @@ const Pagination = ({
   selectPage,
   currentPage,
 }) => {
+  //Components to create the pagnation section
   const pageNumbers = [];
-
   for (let i = 1; i <= Math.ceil(totalPosts / postPerpage); i++) {
     pageNumbers.push(i);
   }
+
   return (
     <nav className="container-pagination">
       <ul className="pagination">
@@ -35,13 +36,14 @@ const Pagination = ({
             </a>
           </li>
         ))}
-        {currentPage === Math.ceil(totalPosts / postPerpage) || (
-          <li>
-            <a onClick={() => nextPage()} className="page-link">
-              ▷
-            </a>
-          </li>
-        )}
+        {currentPage === Math.ceil(totalPosts / postPerpage) ||
+          totalPosts === 0 || (
+            <li>
+              <a onClick={() => nextPage()} className="page-link">
+                ▷
+              </a>
+            </li>
+          )}
       </ul>
     </nav>
   );

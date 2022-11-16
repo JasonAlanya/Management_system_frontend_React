@@ -26,6 +26,7 @@ function EditProduct() {
     navigate("/products");
   };
 
+  //components get the selected product
   useEffect(() => {
     getProductById();
   }, []);
@@ -38,10 +39,16 @@ function EditProduct() {
     setproduct_status(res.data.product_state);
   };
 
+  //components delete the selected product
   const deleteproduct = async () => {
     await axios.delete(`${URI}/${id.id}`);
     navigate("/products");
   };
+
+  //components set the category Id
+  useEffect(() => {
+    setCategoryId(product_category);
+  }, [product_category]);
 
   const setCategoryId = (category) => {
     switch (category) {
@@ -64,10 +71,6 @@ function EditProduct() {
         setproduct_categoryId(1);
     }
   };
-
-  useEffect(() => {
-    setCategoryId(product_category);
-  }, [product_category]);
 
   return (
     <div className="forms">

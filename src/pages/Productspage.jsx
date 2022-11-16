@@ -3,17 +3,19 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import {
+  getProductOrderBy,
+  getProductOrderByAD,
   getProducts,
+  getProductSearchName,
   getProductsQuantity,
   nextPageProducts,
   previousPageProducts,
   selectPageProducts,
 } from "../actions/crudProductsActions";
+import FilterOrder from "../Components/FilterOrder";
 import Pagination from "../Components/Pagination";
 
-const URI = "https://pruebasinicial.azurewebsites.net/productspagination";
-const URI_GET_QUANTITY =
-  "https://pruebasinicial.azurewebsites.net/productsquantity";
+const URI = "https://pruebasinicial.azurewebsites.net";
 
 const Products_per_page = 5;
 
@@ -22,7 +24,15 @@ function Productspage() {
   const state = useSelector((state) => state);
   const dispatch = useDispatch();
 
-  const { products, currentPage, productsQuantity } = state.gettingProducts;
+  const {
+    products,
+    currentPage,
+    productsQuantity,
+    orderByValues,
+    productNameSearch,
+    orderByValue,
+    orderByAD,
+  } = state.gettingProducts;
 
   //components to get the information from the table of prodcuts
   useEffect(() => {
@@ -33,23 +43,55 @@ function Productspage() {
     setProductsQuantity();
   }, []);
 
+  //function to get the quantity of products with filters
   const setProductsQuantity = async () => {
-    const res = await axios.get(URI_GET_QUANTITY);
-    //setproducts(res.data);
-    const cont = res.data[0].counter;
-    dispatch(getProductsQuantity(cont));
+    if (productNameSearch === "") {
+      const res = await axios.get(`${URI}/productsquantity`);
+      const cont = res.data[0].counter;
+      dispatch(getProductsQuantity(cont));
+    } else {
+      const res = await axios.get(
+        `${URI}/productsquantity/${productNameSearch}`
+      );
+      const cont = res.data[0].counter;
+      dispatch(getProductsQuantity(cont));
+    }
+    dispatch(selectPageProducts(1));
   };
 
+  //function to get products with filters
   const setproducts = async () => {
-    const res = await axios.get(
-      `${URI}/${(currentPage - 1) * Products_per_page}&${Products_per_page}`
-    );
-    //setproducts(res.data);
-    dispatch(getProducts(res.data));
+    if (productNameSearch === "") {
+      const res = await axios.get(
+        `${URI}/productspagination/${orderByValue}&${orderByAD}&${
+          (currentPage - 1) * Products_per_page
+        }&${Products_per_page}`
+      );
+      dispatch(getProducts(res.data));
+    } else {
+      const res = await axios.get(
+        `${URI}/productspaginationsearcher/${productNameSearch}&${orderByValue}&${orderByAD}&${
+          (currentPage - 1) * Products_per_page
+        }&${Products_per_page}`
+      );
+      dispatch(getProducts(res.data));
+    }
   };
 
   return (
     <div className="container">
+      <FilterOrder
+        searchBy="Product name"
+        orderBy={orderByValues}
+        setSearcher={(e) => dispatch(getProductSearchName(e))}
+        setSearcherBy={(e) => dispatch(getProductOrderBy(e))}
+        setSearcherByAD={(e) => dispatch(getProductOrderByAD(e))}
+        resetProductsQuantity={() => setProductsQuantity()}
+        resetProducts={() => setproducts()}
+        searcherValue={productNameSearch}
+        orderByValue={orderByValue}
+        orderByADValue={orderByAD}
+      />
       <div className="row">
         <div className="col">
           <Link to="/createproduct" className="btn-create btn btn-primary">
