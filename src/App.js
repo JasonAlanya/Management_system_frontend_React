@@ -14,6 +14,7 @@ function App() {
     <>
       <Navegation />
       <Routes>
+        <Route path="Management_system_frontend/" element={<Orderspage />} />
         <Route path="/" element={<Orderspage />} />
         <Route path="/createorder" element={<Products />} />
         <Route path="/createordersummary" element={<CreateOrder />} />

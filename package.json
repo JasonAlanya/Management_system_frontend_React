@@ -23,7 +23,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "homepage": "Management_system_frontend/",
+  "homepage": "./",
   "eslintConfig": {
     "extends": [
       "react-app",
