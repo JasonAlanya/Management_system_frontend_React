@@ -45,37 +45,22 @@ function Productspage() {
 
   //function to get the quantity of products with filters
   const setProductsQuantity = async () => {
-    if (productNameSearch === "") {
-      const res = await axios.get(`${URI}/productsquantity`);
-      const cont = res.data[0].counter;
-      dispatch(getProductsQuantity(cont));
-    } else {
-      const res = await axios.get(
-        `${URI}/productsquantity/${productNameSearch}`
-      );
-      const cont = res.data[0].counter;
-      dispatch(getProductsQuantity(cont));
-    }
+    const res = await axios.get(
+      `${URI}/productsquantity/?search=${productNameSearch}`
+    );
+    const cont = res.data[0].counter;
+    dispatch(getProductsQuantity(cont));
     dispatch(selectPageProducts(1));
   };
 
   //function to get products with filters
   const setproducts = async () => {
-    if (productNameSearch === "") {
-      const res = await axios.get(
-        `${URI}/productspagination/${orderByValue}&${orderByAD}&${
-          (currentPage - 1) * Products_per_page
-        }&${Products_per_page}`
-      );
-      dispatch(getProducts(res.data));
-    } else {
-      const res = await axios.get(
-        `${URI}/productspaginationsearcher/${productNameSearch}&${orderByValue}&${orderByAD}&${
-          (currentPage - 1) * Products_per_page
-        }&${Products_per_page}`
-      );
-      dispatch(getProducts(res.data));
-    }
+    const res = await axios.get(
+      `${URI}/products/?search=${productNameSearch}&orderSearchBy=${orderByValue}&orderSearch=${orderByAD}&initialPost=${
+        (currentPage - 1) * Products_per_page
+      }&postsPerPage=${Products_per_page}`
+    );
+    dispatch(getProducts(res.data));
   };
 
   return (

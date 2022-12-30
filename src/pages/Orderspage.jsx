@@ -45,37 +45,22 @@ function Orderspage() {
 
   //function to get the quantity of orders with filters
   const setOrdersQuantity = async () => {
-    if (customerNameSearch === "") {
-      const res = await axios.get(`${URI}/ordersquantity`);
-      const cont = res.data[0].counter;
-      dispatch(getOrdersQuantity(cont));
-    } else {
-      const res = await axios.get(
-        `${URI}/ordersquantity/${customerNameSearch}`
-      );
-      const cont = res.data[0].counter;
-      dispatch(getOrdersQuantity(cont));
-    }
+    const res = await axios.get(
+      `${URI}/ordersquantity/?search=${customerNameSearch}`
+    );
+    const cont = res.data[0].counter;
+    dispatch(getOrdersQuantity(cont));
     dispatch(selectPageOrders(1));
   };
 
   //function to get orders with filters
   const setorders = async () => {
-    if (customerNameSearch === "") {
-      const res = await axios.get(
-        `${URI}/orderspagination/${orderByValue}&${orderByAD}&${
-          (currentPage - 1) * Orders_per_page
-        }&${Orders_per_page}`
-      );
-      dispatch(getOrders(res.data));
-    } else {
-      const res = await axios.get(
-        `${URI}/orderspaginationsearcher/${customerNameSearch}&${orderByValue}&${orderByAD}&${
-          (currentPage - 1) * Orders_per_page
-        }&${Orders_per_page}`
-      );
-      dispatch(getOrders(res.data));
-    }
+    const res = await axios.get(
+      `${URI}/orders/?search=${customerNameSearch}&orderSearchBy=${orderByValue}&orderSearch=${orderByAD}&initialPost=${
+        (currentPage - 1) * Orders_per_page
+      }&postsPerPage=${Orders_per_page}`
+    );
+    dispatch(getOrders(res.data));
   };
 
   return (
